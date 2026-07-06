@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Windows 定时任务设置脚本（任务计划程序）
     用于在 Windows 上创建每天定时执行 Git 同步的计划任务
@@ -195,7 +195,7 @@ Write-Host "  设置完成！"
 Write-Host "=========================================="
 Write-Host ""
 Write-Host "  定时计划:  每天 $Time"
-Write-Host "  配置文件:  $ScriptDir\git-repos.conf"
+Write-Host "  配置文件:  $ScriptDir\windows-git-repos.conf"
 Write-Host "  日志目录:  $ScriptDir\logs\"
 Write-Host "  任务名称:  $TaskName"
 Write-Host ""

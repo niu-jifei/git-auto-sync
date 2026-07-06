@@ -127,7 +127,7 @@ cat ~/Library/LaunchAgents/com.user.git-auto-sync.plist
 cd git-auto-sync
 
 # 设置每天 19:30 执行
-.\setup-schedule-windows.ps1 -Time "19:30"
+.\setup-schedule-windows.ps1 -Time "23:30"
 
 # 如果使用自定义配置文件
 .\setup-schedule-windows.ps1 -Time "19:30" -Config "C:\my-repos.conf"
