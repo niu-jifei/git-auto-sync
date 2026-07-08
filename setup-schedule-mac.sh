@@ -113,12 +113,15 @@ if [[ -z "$PYTHON_PATH" ]]; then
     exit 1
 fi
 
-# 构建命令参数
-SCRIPT_ARGS="$SYNC_SCRIPT"
+# 构建命令参数：优先使用用户指定的配置文件，否则使用默认配置
 if [[ -n "$CONFIG_ARG" ]]; then
+    # 展开 ~ 为 $HOME
     CONFIG_ARG="${CONFIG_ARG/#\~/$HOME}"
-    SCRIPT_ARGS="$SYNC_SCRIPT $CONFIG_ARG"
+    CONFIG_FILE="$CONFIG_ARG"
+else
+    CONFIG_FILE="$SCRIPT_DIR/mac-git-repos.conf"
 fi
+SCRIPT_ARGS="$SYNC_SCRIPT $CONFIG_FILE"
 
 # 创建 launchd 目录
 mkdir -p "$PLIST_DIR"

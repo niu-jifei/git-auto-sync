@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Windows 定时任务设置脚本（任务计划程序）
     用于在 Windows 上创建每天定时执行 Git 同步的计划任务
@@ -129,11 +129,13 @@ if (-not $PythonPath) {
 
 Write-Info "Python 路径: $PythonPath"
 
-# 构建执行参数
-$Arguments = "`"$SyncScript`""
+# 构建执行参数：优先使用用户指定的配置文件，否则使用默认配置
 if (-not [string]::IsNullOrWhiteSpace($Config)) {
-    $Arguments += " `"$Config`""
+    $ConfigFile = $Config
+} else {
+    $ConfigFile = Join-Path $ScriptDir "windows-git-repos.conf"
 }
+$Arguments = "`"$SyncScript`" `"$ConfigFile`""
 
 Write-Info "执行命令: $PythonPath $Arguments"
 Write-Info "定时计划: 每天 $Time"
