@@ -121,8 +121,6 @@ if [[ -n "$CONFIG_ARG" ]]; then
 else
     CONFIG_FILE="$SCRIPT_DIR/mac-git-repos.conf"
 fi
-SCRIPT_ARGS="$SYNC_SCRIPT $CONFIG_FILE"
-
 # 创建 launchd 目录
 mkdir -p "$PLIST_DIR"
 
@@ -140,7 +138,8 @@ cat > "$PLIST_FILE" << PLIST_EOF
     <key>ProgramArguments</key>
     <array>
         <string>${PYTHON_PATH}</string>
-        <string>${SCRIPT_ARGS}</string>
+        <string>${SYNC_SCRIPT}</string>
+        <string>${CONFIG_FILE}</string>
     </array>
 
     <key>StartCalendarInterval</key>
@@ -165,7 +164,7 @@ PLIST_EOF
 
 print_info "已创建 plist: $PLIST_FILE"
 print_info "定时计划: 每天 ${HOUR}:${MINUTE}"
-print_info "执行命令: ${PYTHON_PATH} ${SCRIPT_ARGS}"
+print_info "执行命令: ${PYTHON_PATH} ${SYNC_SCRIPT} ${CONFIG_FILE}"
 
 # ============================================================
 # 加载定时任务
