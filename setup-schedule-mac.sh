@@ -46,7 +46,7 @@ print_success() { echo "[✓]  $*"; }
 
 if [[ "${1:-}" == "--remove" || "${1:-}" == "-r" ]]; then
     print_info "正在移除定时任务..."
-    launchctl unload "$PLIST_FILE" 2>/dev/null || true
+    launchctl bootout "gui/$(id -u)/${PLIST_LABEL}" 2>/dev/null || true
     if [[ -f "$PLIST_FILE" ]]; then
         rm -f "$PLIST_FILE"
         print_success "plist 文件已删除"
@@ -158,6 +158,12 @@ cat > "$PLIST_FILE" << PLIST_EOF
 
     <key>RunAtLoad</key>
     <false/>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
 </dict>
 </plist>
 PLIST_EOF
@@ -171,14 +177,14 @@ print_info "执行命令: ${PYTHON_PATH} ${SYNC_SCRIPT} ${CONFIG_FILE}"
 # ============================================================
 
 # 先卸载旧任务（如果已存在）
-launchctl unload "$PLIST_FILE" 2>/dev/null || true
+launchctl bootout "gui/$(id -u)/${PLIST_LABEL}" 2>&1 || true
 
 # 加载新任务
-if launchctl load "$PLIST_FILE" 2>/dev/null; then
+if launchctl bootstrap "gui/$(id -u)" "$PLIST_FILE" 2>&1; then
     print_success "定时任务已加载！"
 else
     print_error "定时任务加载失败"
-    print_warn "可手动加载: launchctl load \"$PLIST_FILE\""
+    print_warn "可手动加载: launchctl bootstrap \"gui/$(id -u)\" \"$PLIST_FILE\""
     exit 1
 fi
 
